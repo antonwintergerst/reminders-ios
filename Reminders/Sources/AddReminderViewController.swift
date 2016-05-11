@@ -24,8 +24,8 @@ class AddReminderViewController: UIViewController {
         super.prepareForSegue(segue, sender: sender)
         
         if let viewController = segue.destinationViewController as? ReminderViewController {
-            // TODO: Pass delegate to ReminderViewController
-
+            // Pass delegate to ReminderViewController
+            viewController.delegate = delegate
         }
     }
 }

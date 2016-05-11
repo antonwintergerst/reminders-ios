@@ -30,8 +30,8 @@ class TaskTableViewCell: UITableViewCell, UITextFieldDelegate {
             completed = !completed
             updateRadioButton()
             
-            // TODO: Use delegate function to update task
-
+            // Use delegate function to update task
+            delegate?.didUpdateTask(self, completed: completed, description: textField.text)
         }
     }
     
@@ -43,22 +43,22 @@ class TaskTableViewCell: UITableViewCell, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        // TODO: Set delegate variable for textField
-
+        // Set delegate variable for textField
+        textField.delegate = self
     }
     
     // MARK: UITextFieldDelegate
     func textFieldDidBeginEditing(textField: UITextField) {
         
-        // TODO: Use delegate function to signal task textField is being edited
-
+        // Use delegate function to signal task textField is being edited
+        delegate?.didBeginEditingTask(self, textField: textField)
     }
     
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
-        // TODO: Use delegate function to update task
-
+        // Use delegate function to update task
+        delegate?.didUpdateTask(self, completed: completed, description: textField.text)
         
         return true
     }

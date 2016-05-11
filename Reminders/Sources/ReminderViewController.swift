@@ -48,18 +48,18 @@ class ReminderViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // TODO: Store last edited task
-
+        // Store last edited task
+        saveLastEditedTask()
         
-        // TODO: Store reminder title
-
+        // Store reminder title
+        reminder.title = titleTextField.text
         
-        // TODO: Use delegate function to edit reminder if it already exists or add a new one if it doesn't exist
-        
-        
-        
-        
-        
+        // Use delegate function to edit reminder if it already exists or add a new one if it doesn't exist
+        if let indexPath = reminderIndexPath {
+            delegate?.shouldEditReminder(reminder, indexPath: indexPath)
+        } else {
+            delegate?.shouldAddReminder(reminder)
+        }
     }
     
     func saveLastEditedTask() {
@@ -73,17 +73,17 @@ class ReminderViewController: UIViewController, UITableViewDelegate, UITableView
     // MARK: TaskTableViewDelegate
     func didBeginEditingTask(cell: UITableViewCell, textField: UITextField) {
         if let indexPath = tasksTableView.indexPathForCell(cell) {
-            // TODO: Save reminder task textfield and indexPath for use later
-            
-            
+            // Save reminder task textfield and indexPath for use later
+            editingTaskTextfield = textField
+            editingTaskIndexPath = indexPath
         }
     }
     
     func didUpdateTask(cell: UITableViewCell, completed: Bool, description: String?) {
         if let indexPath = tasksTableView.indexPathForCell(cell) {
             if reminder.tasks.count > indexPath.row {
-                // TODO: Update reminder task at indexPath
-
+                // Update reminder task at indexPath
+                reminder.tasks[indexPath.row] = Task(completed: completed, description: description)
             }
         }
     }
@@ -104,14 +104,14 @@ class ReminderViewController: UIViewController, UITableViewDelegate, UITableView
         default:
             cell = tableView.dequeueReusableCellWithIdentifier(taskTableViewCellIdentifier)
             if let cell = cell as? TaskTableViewCell {
-                // TODO: Set cell delegate variable
-
+                // Set cell delegate variable
+                cell.delegate = self
                 
                 if reminder.tasks.count > indexPath.row {
-                    // TODO: Set cell completed state and description
-                    
-                    
-                    
+                    // Set cell completed state and description
+                    let task = reminder.tasks[indexPath.row]
+                    cell.completed = task.completed
+                    cell.textField.text = task.description
                     cell.updateRadioButton()
                 }
             }
@@ -128,8 +128,8 @@ class ReminderViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.row {
         case reminder.tasks.count:
-            // TODO: Store last edited task
-
+            // Store last edited task
+            saveLastEditedTask()
             
             // Add new task
             reminder.tasks.append(Task())
@@ -145,8 +145,8 @@ class ReminderViewController: UIViewController, UITableViewDelegate, UITableView
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            // TODO: Remove reminder task using indexPath.row
-
+            // Remove reminder task using indexPath.row
+            reminder.tasks.removeAtIndex(indexPath.row)
             
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }

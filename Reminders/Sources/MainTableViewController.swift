@@ -41,18 +41,18 @@ class MainTableViewController: UITableViewController, ReminderDelegate {
         
         if let viewController = segue.destinationViewController as? AddReminderViewController {
             
-            // TODO: Set delegate variable for viewController
-
+            // Set delegate variable for viewController
+            viewController.delegate = self
             
         } else if let viewController = segue.destinationViewController as? EditReminderViewController {
             if let selectedIndexPath = selectedIndexPath {
                 if reminders.count > selectedIndexPath.row {
                     
-                    // TODO: Pass reminder, selectedIndexPath and set delegate variable for viewController
-                    
-                    
-                    
-                    
+                    // Pass reminder, selectedIndexPath and set delegate variable for viewController
+                    let reminder = reminders[selectedIndexPath.row]
+                    viewController.delegate = self
+                    viewController.reminder = reminder
+                    viewController.reminderIndexPath = selectedIndexPath
                 }
             }
         }
@@ -60,16 +60,16 @@ class MainTableViewController: UITableViewController, ReminderDelegate {
     
     // MARK: - AddReminderDelegate
     func shouldAddReminder(reminder: Reminder) {
-        // TODO: Add new reminder
-
+        // Add new reminder
+        reminders.append(reminder)
     }
     
     // MARK: - EditReminderDelegate
     func shouldEditReminder(reminder: Reminder, indexPath: NSIndexPath?) {
-        // TODO: Edit existing reminder
-        
-        
-        
+        // Edit existing reminder
+        if let indexPath = indexPath {
+            reminders[indexPath.row] = reminder
+        }
     }
     
     // MARK: - UITableViewDataSource
@@ -119,8 +119,8 @@ class MainTableViewController: UITableViewController, ReminderDelegate {
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == UITableViewCellEditingStyle.Delete {
-            // TODO: Remove reminder using indexPath.row
-
+            // Remove reminder using indexPath.row
+            reminders.removeAtIndex(indexPath.row)
             
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
         }

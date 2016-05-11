@@ -21,12 +21,12 @@ class EditReminderViewController: UIViewController {
         super.prepareForSegue(segue, sender: sender)
         
         if let viewController = segue.destinationViewController as? ReminderViewController {
-            // TODO: Pass reminder, reminderIndexPath and delegate to ReminderViewController
-            
-            
-            
-            
-            
+            // Pass reminder, reminderIndexPath and delegate to ReminderViewController
+            if let reminder = reminder {
+                viewController.delegate = delegate
+                viewController.reminder = reminder
+                viewController.reminderIndexPath = reminderIndexPath
+            }
         }
     }
 }
